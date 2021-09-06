@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: daprsignalrbeta-deployment
+  labels:
+    app: daprsignalrbeta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: daprsignalrbeta
+  template:
+    metadata:
+      labels:
+        app: daprsignalrbeta
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "daprsignalrbeta"
+        dapr.io/app-port: "80"
+    spec:
+      containers:
+        - name: daprsignalrbeta
+          image: c2testcr.azurecr.io/daprsignalrbeta
+          env:
+            - name: RedisConfig__UseAsBackplane
+              value: "false"
+            - name: RedisConfig__Settings__Host
+              value: "sigredis-master.signalrredis.svc.cluster.local"
+            - name: RedisConfig__Settings__Password
+              valueFrom:
+                secretKeyRef:
+                  name: redispassword
+                  key: redispassword
+            - name: PodName
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          ports:
+            - containerPort: 80

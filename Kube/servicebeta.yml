@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: daprsignalrbeta-service
+spec:
+  selector:
+    app: daprsignalrbeta
+  ports:
+    - name: daprsignalrbeta-port
+      port: 80
+      targetPort: 80
+  sessionAffinity: ClientIP
+  type: LoadBalancer

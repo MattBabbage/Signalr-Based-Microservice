@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unitconvertormain
+  labels:
+    app: daprsignalrbeta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unitconvertormain
+  template:
+    metadata:
+      labels:
+        app: unitconvertormain
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "unitconvertormain"
+        dapr.io/app-port: "80"
+    spec:
+      containers:
+        - name: unitconvertormain
+          image: c2testcr.azurecr.io/unitconvertormain:latest
+          ports:
+            - containerPort: 80
